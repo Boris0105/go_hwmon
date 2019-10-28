@@ -10,6 +10,7 @@ import "sort"
 
 func funcTest(args map[string]interface{}) {
 	dev_cpu := factory.CreateDeviceCpu()
+	fmt.Printf("Test\n")
 	list_abstemp := dev_cpu.GetListAbsTemp()
 	for _, abstemp := range list_abstemp {
 		if abstemp.ValueType == config.TYPE_RSP_ERROR {
