@@ -96,6 +96,15 @@ func funcCpuThreshold(args map[string]interface{}) {
 func funcCpuPowerband(args map[string]interface{}) {
 	dev_cpu := factory.CreateDeviceCpu()
 	list_ap := dev_cpu.GetListAveragePower()
+    dev_amb := factory.CreateDeviceAmb()     // take amb into consideration
+	list_abstemp := dev_amb.GetListAbsTemp() // take amb into consideration
+	for _, abstemp := range list_abstemp {
+		if abstemp.ValueType == config.TYPE_RESPONSE {
+			continue
+		}
+		
+		absval := utils.ToFloat(abstemp.Value)
+
 
 	for _, ap := range list_ap {
 		if ap.ValueType == config.TYPE_RESPONSE {
@@ -112,17 +121,96 @@ func funcCpuPowerband(args map[string]interface{}) {
 		instant := ap.Instant
 		key := fmt.Sprintf("PB_CPU_%d", instant)
 		//fmt.Printf("CPU Power %f/%f=%f\n", val_ap, val_mp, val_ap/val_mp)
+		
 		if val < 0.3 {
-			dev_cpu.SetExpectFanDuty(key, instant, 15)
+			if absval <25 { 
+				dev_cpu.SetExpectFanDuty(key, instant, 15)
+			} else if (val >= 25) && (val < 27) {
+				dev_cpu.SetExpectFanDuty(key, instant, 20)
+			} else if (val >= 27) && (val < 29) {
+				dev_cpu.SetExpectFanDuty(key, instant, 20)	
+			} else if (val >= 29) && (val < 31) {
+				dev_cpu.SetExpectFanDuty(key, instant, 30)
+			} else if (val >= 31) && (val < 33) {
+				dev_cpu.SetExpectFanDuty(key, instant, 40)
+			} else if (val >= 33) && (val < 35) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 35) && (val < 37) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 37) && (val < 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			}
+	
+			
 		} else if (val >= 0.3) && (val < 0.6) {
-			dev_cpu.SetExpectFanDuty(key, instant, 30)
+			if absval <25 { 
+				dev_cpu.SetExpectFanDuty(key, instant, 35)
+			} else if (val >= 25) && (val < 27) {
+				dev_cpu.SetExpectFanDuty(key, instant, 40)
+			} else if (val >= 27) && (val < 29) {
+				dev_cpu.SetExpectFanDuty(key, instant, 40)	
+			} else if (val >= 29) && (val < 31) {
+				dev_cpu.SetExpectFanDuty(key, instant, 40)
+			} else if (val >= 31) && (val < 33) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 33) && (val < 35) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 35) && (val < 37) {
+				dev_cpu.SetExpectFanDuty(key, instant, 70)
+			} else if (val >= 37) && (val < 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 70)
+			} else if (val >= 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 70)
+			}
+			
+			
 		} else if (val >= 0.6) && (val < 0.9) {
-			dev_cpu.SetExpectFanDuty(key, instant, 70)
+			if absval <25 { 
+				dev_cpu.SetExpectFanDuty(key, instant, 40)
+			} else if (val >= 25) && (val < 27) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 27) && (val < 29) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)	
+			} else if (val >= 29) && (val < 31) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 31) && (val < 33) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 33) && (val < 35) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 35) && (val < 37) {
+				dev_cpu.SetExpectFanDuty(key, instant, 75)
+			} else if (val >= 37) && (val < 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 75)
+			} else if (val >= 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 75)
+			}
+			
 		} else {
-			dev_cpu.SetExpectFanDuty(key, instant, 100)
+			if absval <25 { 
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 25) && (val < 27) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 27) && (val < 29) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)	
+			} else if (val >= 29) && (val < 31) {
+				dev_cpu.SetExpectFanDuty(key, instant, 50)
+			} else if (val >= 31) && (val < 33) {
+				dev_cpu.SetExpectFanDuty(key, instant, 60)
+			} else if (val >= 33) && (val < 35) {
+				dev_cpu.SetExpectFanDuty(key, instant, 70)
+			} else if (val >= 35) && (val < 37) {
+				dev_cpu.SetExpectFanDuty(key, instant, 80)
+			} else if (val >= 37) && (val < 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 90)
+			} else if (val >= 43) {
+				dev_cpu.SetExpectFanDuty(key, instant, 100)
+			}
 		}
 	}
-}
+ }
+}	
 
 func setupFansAndDevices() {
 	dev_fan := factory.CreateDeviceFan()
@@ -165,6 +253,7 @@ func setupFansAndDevices() {
 		*/
 	}
 }
+
 
 func getSortedKeys(list map[string]common.DeviceInfo_t) ([]string) {
 	keys := make([]string, 0, len(list))

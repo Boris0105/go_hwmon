@@ -36,7 +36,8 @@ func PullObj(key string) (interface{}) {
 	}
 }
 
-// SET record
+// SET record   //question here
+
 func PushObj(key string, val interface{}) (bool){
 	data := common.DeviceInfo_t { Entity:-1, Instant:-1, ValueType:config.TYPE_OBJECT, Value:val }
 	data.Key = key
@@ -156,7 +157,7 @@ func PullObjListDeviceFanMap()(map[string]common.DeviceInfo_t) {
 	obj := (msg.Data).(map[string]common.DeviceInfo_t)
 	return obj
 }
-// GET record list
+// sET record list
 func PullObjDeviceFanMap(entity int32, instant int32) (map[string]common.DeviceInfo_t) {
 	data := common.DeviceInfo_t { Entity:entity, Instant:instant, ValueType:config.TYPE_DEVICEFANMAP, Value:0 }
 	data.Key = createKeyByEI(data.Entity, data.Instant)
@@ -188,7 +189,7 @@ func PushObjDeviceFanDutyOutput(entity int32, instant int32, duty float32) (comm
 	obj := (msg.Data).(common.DeviceInfo_t)
 	return obj
 }
-// SET record
+// SET record LIST
 func InitObjDeviceFanDutyOutput(entity int32, instant int32, duty float32) (common.DeviceInfo_t) {
 	data := common.DeviceInfo_t { Entity:entity, Instant:instant, ValueType:config.TYPE_INITFANDUTY, Value:duty }
 	data.Key = createKeyByEI(data.Entity, data.Instant)
